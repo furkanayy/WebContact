@@ -1,0 +1,1 @@
+﻿add-migration migrationName -outputdir "Concrete/EntityFrameworkCore/Migrations"

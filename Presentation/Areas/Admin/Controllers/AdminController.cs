@@ -32,12 +32,45 @@ namespace Presentation.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public IActionResult Login(UserLoginDto model)
+        public async Task<IActionResult> LoginAsync(UserLoginDto model)
         {
             if (UnitOfWork.UserManager.LoginControl(model))
-                return View("Home");
+            {
+                var User = UnitOfWork.UserManager.Get(p => p.UserName == model.UserName);
+                var userClaims = new List<Claim>()
+                {
+                    new Claim("Id", User.Id.ToString()),
+                    new Claim("Username", User.UserName ?? ""),
+                    new Claim("FirstName", User.FirstName ?? ""),
+                    new Claim("LastName", User.LastName ?? ""),
+                    new Claim("Phonenumber", User.PhoneNumber?.ToString() ?? ""),
+                    new Claim("Email", User.Email?.ToString() ?? ""),
+                    new Claim("Photo", User.Photo ?? ""),
+                    new Claim("IsApproved", User.IsApproved.ToString()),
+                    new Claim("Role", User.Role?.RoleName ?? ""),
+                    new Claim(ClaimTypes.Role, User.Role?.RoleName ?? "")
+                };
+                var grandmaIdentity = new ClaimsIdentity(userClaims, "Login");
+                var userPrincipal = new ClaimsPrincipal(new[] { grandmaIdentity });
+                var authProperties = new AuthenticationProperties()
+                {
+                    ExpiresUtc = DateTime.UtcNow.AddYears(10),
+                    AllowRefresh = false,
+                };
+                await HttpContext.SignInAsync(userPrincipal, authProperties);
+                if (User.RoleId == 1)
+                {
+                    return RedirectToAction("Home");
+                }
+                else if (User.RoleId == 2)
+                {
+                    return RedirectToAction("Home");
+                }
+                else
+                    return RedirectToAction("Home");
+            }
             else
-                return View();
+                return View("Login");
         }
 
         [HttpGet]
@@ -61,6 +94,12 @@ namespace Presentation.Areas.Admin.Controllers
                 ModelState.AddModelError("", ex.Message);
                 return View();
             }
+        }
+        [HttpGet]
+        [Route("Home")]
+        public IActionResult Home()
+        {
+            return View();
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using Business.Abstract.Service;
 using DataAccess.Abstract;
 using Entity.Concrete;
+using Microsoft.EntityFrameworkCore;
 using Model.Concrete;
 using System;
 using System.Collections.Generic;
@@ -23,17 +24,17 @@ namespace Business.Concrete.Manager
 
         public UserDto Get(Expression<Func<User, bool>> filter)
         {
-            var model = _userDal.Get(filter);
+            var model = _userDal.Get(filter, include => include.Include(x => x.Role));
             return _mapperService.Map<User, UserDto>(model);
         }
 
-        public bool LoginControl(UserLoginDto userLoginDto)
-        {
-            var user = _userDal.Get(x => x.UserName == userLoginDto.UserName && x.Password == userLoginDto.Password);
-            if (user != null)
-                return true;
-            return false;
-        }
+            public bool LoginControl(UserLoginDto userLoginDto)
+            {
+                var user = _userDal.Get(x => x.UserName == userLoginDto.UserName && x.Password == userLoginDto.Password && x.IsApproved);
+                if (user != null)
+                    return true;
+                return false;
+            }
 
         public void AddUser(UserRegisterDto userRegisterDto)
         {

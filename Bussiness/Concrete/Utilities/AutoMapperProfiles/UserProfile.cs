@@ -14,12 +14,15 @@ namespace Business.Concrete.Utilities.AutoMapperProfiles
     {
         public UserProfile()
         {
+
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
             CreateMap<User, UserLoginDto>();
             CreateMap<UserLoginDto, User>();
             CreateMap<User, UserRegisterDto>();
             CreateMap<UserRegisterDto, User>();
+            CreateMap<Role, RoleDto>();
+            CreateMap<RoleDto, Role>();
         }
     }
 }

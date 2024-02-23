@@ -8,10 +8,12 @@ using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFrameworkCore.EfDals;
 using FluentValidation.AspNetCore;
 using Business.Concrete.Utilities.Validation;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 ///////////////////////////////////////
@@ -23,13 +25,29 @@ builder.Services.AddSingleton<IUserDal, EfUserDal>();
 builder.Services.AddSingleton<IMapperService, AutoMapperManager>();
 builder.Services.AddSingleton<IUserService, UserManager>();
 
-builder.Services.AddControllers().AddFluentValidation(fv =>
+#pragma warning disable CS0618 // AddFluentValidation is obsolete
+builder.Services.AddControllersWithViews()
+    .AddFluentValidation(fv =>
+    {
+        //fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+        fv.RegisterValidatorsFromAssemblyContaining<UserLoginDtoValidation>();
+    });
+#pragma warning restore CS0618 // AddFluentValidation is obsolete
+
+builder.Services.AddAuthentication(options =>
 {
-    //fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-    fv.RegisterValidatorsFromAssemblyContaining<UserLoginDtoValidation>();
-
+    options.DefaultAuthenticateScheme = "CookieAuthentication";
+    options.DefaultSignInScheme = "CookieAuthentication";
+    options.DefaultSignOutScheme = "CookieAuthentication";
+    options.RequireAuthenticatedSignIn = false;
+})
+.AddCookie("CookieAuthentication", config =>
+{
+    config.Cookie.Name = "UserLoginCookie";
+    config.LoginPath = "/Login"; // Giriþ yapýlacak sayfa
+    config.LogoutPath = "/Logout"; // Çýkýþ yapýlacak sayfa
+    config.AccessDeniedPath = "/Error/AccessDenied"; // Yetki olmayan sayfa
 });
-
 //////////////////////////////////////
 
 var app = builder.Build();
@@ -43,11 +61,14 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapRazorPages();
 

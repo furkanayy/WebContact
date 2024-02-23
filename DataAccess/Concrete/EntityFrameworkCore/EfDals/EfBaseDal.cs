@@ -14,19 +14,25 @@ namespace DataAccess.Concrete.EntityFrameworkCore.EfDals
         where TEntity : class, IEntity, new()
         where TContext : DbContext, new()
     {
-        public TEntity Get(Expression<Func<TEntity, bool>> filter)
+        public TEntity Get(Expression<Func<TEntity, bool>> filter, Func<IQueryable<TEntity>, IQueryable<TEntity>> detailFilter = null)
         {
             using (var context = new TContext())
             {
-                return context.Set<TEntity>().FirstOrDefault(filter);
+                if (filter != null && detailFilter != null) return detailFilter(context.Set<TEntity>()).FirstOrDefault(filter);
+                else if (filter == null && detailFilter != null) return detailFilter(context.Set<TEntity>()).FirstOrDefault();
+                else if (filter != null && detailFilter == null) return context.Set<TEntity>().FirstOrDefault(filter);
+                else return context.Set<TEntity>().FirstOrDefault();
             }
         }
 
-        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>>? filter = null)
+        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>>? filter = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> detailFilter = null)
         {
             using (var context = new TContext())
             {
-                return filter == null ? context.Set<TEntity>() : context.Set<TEntity>().Where(filter);
+                if (filter != null && detailFilter != null) return detailFilter(context.Set<TEntity>()).Where(filter).ToList();
+                else if (filter == null && detailFilter != null) return detailFilter(context.Set<TEntity>()).ToList();
+                else if (filter != null && detailFilter == null) return context.Set<TEntity>().Where(filter).ToList();
+                else return context.Set<TEntity>().ToList();
             }
         }
 

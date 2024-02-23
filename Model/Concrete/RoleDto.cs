@@ -10,7 +10,7 @@ namespace Model.Concrete
     public class RoleDto : IDto
     {
         public int Id { get; set; }
-        public string RoleName { get; set; }
+        public string? RoleName { get; set; }
 
         // Navigation Property
         public ICollection<UserDto>? Users { get; set; }

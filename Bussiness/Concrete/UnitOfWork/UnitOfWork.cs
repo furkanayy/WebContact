@@ -20,16 +20,6 @@ namespace Business.Concrete.UnitOfWork
             _userService = userService;
         }
         public IUserService UserManager { get { return _userService; } }
-        //public int Complete()
-        //{
-        //    try
-        //    {
-        //        return _context.SaveChanges();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw e;
-        //    }
-        //}
+
     }
 }

@@ -1,0 +1,35 @@
+﻿@model ProfileDto
+@{
+    Layout = "/Views/Shared/_WebsiteLayout.cshtml";
+}
+
+<div class="container">
+    <h1>Profil Sayfası</h1>
+
+    <form action="@Url.Action("Profile", "Admin")" method="post">
+        <div class="form-group">
+            <label for="lastNameInput">Ad:</label>
+            <input type="text" class="form-control" asp-for="FirstName">
+        </div>
+        <div class="form-group">
+            <label for="emailInput">Soyad:</label>
+            <input type="text" class="form-control" asp-for="LastName">
+        </div>
+        <div class="form-group">
+            <label for="userNameInput">Telefon Numarası:</label>
+            <input type="number" class="form-control" asp-for="PhoneNumber">
+        </div>
+        <div class="form-group">
+            <label for="firstNameInput">Email Adresi:</label>
+            <input type="email" class="form-control" asp-for="Email">
+        </div>
+        <div class="form-group">
+            <label for="lastNameInput">Fotoğraf:</label>
+            <input type="text" class="form-control" asp-for="Photo">
+        </div>
+
+        <!-- Diğer bilgileri buraya ekleyebilirsin -->
+
+        <button type="submit" class="btn btn-primary">Değişiklikleri Kaydet</button>
+    </form>
+</div>

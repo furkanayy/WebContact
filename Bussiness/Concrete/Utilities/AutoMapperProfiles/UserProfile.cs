@@ -21,8 +21,8 @@ namespace Business.Concrete.Utilities.AutoMapperProfiles
             CreateMap<UserLoginDto, User>();
             CreateMap<User, UserRegisterDto>();
             CreateMap<UserRegisterDto, User>();
-            CreateMap<Role, RoleDto>();
-            CreateMap<RoleDto, Role>();
+            CreateMap<ProfileDto, User>();
+            CreateMap<User, ProfileDto>();
         }
     }
 }

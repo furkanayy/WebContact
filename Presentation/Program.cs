@@ -9,6 +9,7 @@ using DataAccess.Concrete.EntityFrameworkCore.EfDals;
 using FluentValidation.AspNetCore;
 using Business.Concrete.Utilities.Validation;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,20 +35,15 @@ builder.Services.AddControllersWithViews()
     });
 #pragma warning restore CS0618 // AddFluentValidation is obsolete
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = "CookieAuthentication";
-    options.DefaultSignInScheme = "CookieAuthentication";
-    options.DefaultSignOutScheme = "CookieAuthentication";
-    options.RequireAuthenticatedSignIn = false;
-})
-.AddCookie("CookieAuthentication", config =>
-{
-    config.Cookie.Name = "UserLoginCookie";
-    config.LoginPath = "/Login"; // Giriþ yapýlacak sayfa
-    config.LogoutPath = "/Logout"; // Çýkýþ yapýlacak sayfa
-    config.AccessDeniedPath = "/Error/AccessDenied"; // Yetki olmayan sayfa
-});
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(config =>
+    {
+        config.Cookie.Name = "UserLoginCookie";
+        config.LoginPath = "/Login"; // Giriþ yapýlacak sayfa
+        config.LogoutPath = "/Logout"; // Çýkýþ yapýlacak sayfa
+        config.AccessDeniedPath = "/Error/AccessDenied"; // Yetki olmayan sayfa
+    });
+
 //////////////////////////////////////
 
 var app = builder.Build();
@@ -66,9 +62,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
-
 app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapRazorPages();
 

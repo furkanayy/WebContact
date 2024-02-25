@@ -1,0 +1,36 @@
+﻿@model List<ContactsDto>
+
+@{
+    Layout = "/Views/Shared/_WebsiteLayout.cshtml";
+}
+
+<div class="container">
+    <h1>Rehber Menüsü</h1>
+
+    <!-- Kişi ekleme butonu -->
+    <a href="#" class="btn btn-primary mb-3">Kişi Ekle</a>
+
+    <!-- Kişi listesi -->
+    <div class="row">
+        @* @foreach (var contact in Model)
+        {
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <img src="@contact.Photo" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@contact.FirstName @contact.LastName</h5>
+                        <!-- Düzenleme butonu -->
+                        <a href="#" class="btn btn-sm btn-outline-primary mb-2">Düzenle</a>
+                        <!-- Silme butonu -->
+                        <a href="#" class="btn btn-sm btn-outline-danger mb-2">Sil</a>
+                    </div>
+                </div>
+            </div> *@
+        }
+    </div>
+
+    <!-- Seçili kişinin bilgilerinin düzenlenebileceği alan -->
+    <div class="row">
+        <!-- Inputlar buraya gelecek -->
+    </div>
+</div>

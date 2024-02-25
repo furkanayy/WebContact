@@ -12,7 +12,5 @@ namespace Model.Concrete
         public int Id { get; set; }
         public string? RoleName { get; set; }
 
-        // Navigation Property
-        public ICollection<UserDto>? Users { get; set; }
     }
 }

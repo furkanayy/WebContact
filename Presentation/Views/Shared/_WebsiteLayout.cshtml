@@ -1,1 +1,54 @@
-﻿
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <!-- CSS ve diğer stil dosyalarını burada dahil edebilirsiniz -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Özel CSS dosyaları -->
+    <link rel="stylesheet" href="~/css/site.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <ul>
+            <a href=@Url.Action("Home","Admin")>ANASAYFA</a>
+            <a href=@Url.Action("ContactsMenu", "Admin")>REHBER MENÜSÜ</a>
+            @if (User.HasClaim("RoleId", "1") || User.HasClaim("RoleId", "2"))
+            {
+                <a href="#">KULLANICI YÖNETİM MENÜSÜ</a>
+                <a href="#">LOG MENÜSÜ</a>
+            }
+
+        </ul>
+        @if (User.HasClaim("RoleId", "1"))
+        {
+            <div class="navbar-right">
+                <a href="#">KULLANICILAR</a>
+            </div>
+        }
+        @if (User.HasClaim("RoleId", "2") || User.HasClaim("RoleId", "3"))
+        {
+            <div class="navbar-right">
+                <a href=@Url.Action("Profile", "Admin")>@User.FindFirst("UserName")?.Value.ToUpper()</a>
+            </div>
+        }
+    </div>
+
+    <!-- Ana içerik alanı -->
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <!-- JavaScript dosyalarını burada dahil edebilirsiniz -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Özel JavaScript dosyaları -->
+    <script src="~/js/site.js"></script>
+
+</body>
+</html>
+

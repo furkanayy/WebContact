@@ -15,6 +15,7 @@ namespace Business.Concrete.Manager
                 cfg.AddCollectionMappers();
 
                 cfg.AddProfile(new UserProfile());
+                cfg.AddProfile(new RoleProfile());
 
             });
 

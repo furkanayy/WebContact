@@ -12,7 +12,9 @@ namespace Business.Abstract.Service
     public interface IUserService
     {
         UserDto Get(Expression<Func<User, bool>> filter);
+        ProfileDto GetProfile(Expression<Func<User, bool>> filter);
         bool LoginControl(UserLoginDto userLoginDto);
         void AddUser(UserRegisterDto userRegisterDto);
+        void UpdateUser(ProfileDto profileDto);
     }
 }

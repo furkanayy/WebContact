@@ -28,13 +28,19 @@ namespace Business.Concrete.Manager
             return _mapperService.Map<User, UserDto>(model);
         }
 
-            public bool LoginControl(UserLoginDto userLoginDto)
-            {
-                var user = _userDal.Get(x => x.UserName == userLoginDto.UserName && x.Password == userLoginDto.Password && x.IsApproved);
-                if (user != null)
-                    return true;
-                return false;
-            }
+        public ProfileDto GetProfile(Expression<Func<User, bool>> filter)
+        {
+            var model = _userDal.Get(filter);
+            return _mapperService.Map<User, ProfileDto>(model);
+        }
+
+        public bool LoginControl(UserLoginDto userLoginDto)
+        {
+            var user = _userDal.Get(x => x.UserName == userLoginDto.UserName && x.Password == userLoginDto.Password && x.IsApproved);
+            if (user != null)
+                return true;
+            return false;
+        }
 
         public void AddUser(UserRegisterDto userRegisterDto)
         {
@@ -53,6 +59,13 @@ namespace Business.Concrete.Manager
 
             // Kullanıcıyı veritabanına ekle
             _userDal.Add(newUser);
+        }
+
+        public void UpdateUser(ProfileDto profileDto)
+        {
+            var existingUser = _userDal.Get(x => x.Id == profileDto.Id);
+            var updatedUser = _mapperService.Map<ProfileDto, User>(profileDto, existingUser);
+            _userDal.Update(updatedUser);
         }
     }
 }

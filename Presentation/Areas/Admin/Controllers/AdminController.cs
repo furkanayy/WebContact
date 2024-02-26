@@ -105,6 +105,7 @@ namespace Presentation.Areas.Admin.Controllers
                 return View();
             }
         }
+
         [HttpGet]
         [Authorize(Roles = "SuperAdmin, Admin, User")]
         [Route("Home")]
@@ -114,6 +115,15 @@ namespace Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Route("SignOut")]
+        public async Task<IActionResult> SignOut()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Login");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, User")]
         [Route("Profile")]
         public IActionResult Profile()
         {
@@ -124,6 +134,7 @@ namespace Presentation.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, User")]
         [Route("Profile")]
         public IActionResult Profile(ProfileDto model)
         {
@@ -134,6 +145,7 @@ namespace Presentation.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin, Admin, User")]
         [Route("ContactsMenu")]
         public IActionResult ContactsMenu()
         {

@@ -14,25 +14,27 @@
     <!-- Navbar -->
     <div class="navbar">
         <ul>
-            <a href=@Url.Action("Home","Admin")>ANASAYFA</a>
-            <a href=@Url.Action("ContactsMenu", "Admin")>REHBER MENÜSÜ</a>
+            <a href=@Url.Action("Home","Admin")>Anasayfa</a>
+            <a href=@Url.Action("ContactsMenu", "Admin")>Rehber Menüsü</a>
             @if (User.HasClaim("RoleId", "1") || User.HasClaim("RoleId", "2"))
             {
-                <a href="#">KULLANICI YÖNETİM MENÜSÜ</a>
-                <a href="#">LOG MENÜSÜ</a>
+                <a href="#">Kullanıcı Yönetim Menüsü</a>
+                <a href="#">Log Menüsü</a>
             }
 
         </ul>
         @if (User.HasClaim("RoleId", "1"))
         {
             <div class="navbar-right">
-                <a href="#">KULLANICILAR</a>
+                <a href="#">Kullanıcılar</a>
+                <a href=@Url.Action("SignOut", "Admin")>Oturum Kapat</a>
             </div>
         }
         @if (User.HasClaim("RoleId", "2") || User.HasClaim("RoleId", "3"))
         {
             <div class="navbar-right">
                 <a href=@Url.Action("Profile", "Admin")>@User.FindFirst("UserName")?.Value.ToUpper()</a>
+                <a href=@Url.Action("SignOut", "Admin")>Oturum Kapat</a>
             </div>
         }
     </div>
